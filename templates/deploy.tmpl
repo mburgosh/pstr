@@ -45,7 +45,7 @@ spec:
         readinessProbe:
           {{if .Deploy.Readiness.Path -}}httpGet:
             path: {{.Deploy.Readiness.Path}}
-            port: 80
+            port: {{if .Deploy.Readiness.Port}}{{.Deploy.Readiness.Port}}{{else}}80{{end}}
             scheme: HTTP
           {{else if .Deploy.Readiness.Exec.Command}}exec:
             command: [{{ range $index,$cmd := .Deploy.Readiness.Exec.Command}}{{if $index}},"{{$cmd}}"{{else}}"{{$cmd}}"{{end}}{{end}}]{{end}}
@@ -57,7 +57,7 @@ spec:
         livenessProbe:
           {{if .Deploy.Health.Path -}}httpGet:
             path: {{.Deploy.Health.Path}}
-            port: 80
+            port: {{if .Deploy.Health.Port}}{{.Deploy.Health.Port}}{{else}}80{{end}}
             scheme: HTTP
           {{else if .Deploy.Health.Exec.Command}}exec:
             command: [{{ range $index,$cmd := .Deploy.Health.Exec.Command}}{{if $index}},"{{$cmd}}"{{else}}"{{$cmd}}"{{end}}{{end}}]{{end}}
